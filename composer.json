@@ -12,8 +12,5 @@
             "email": "804630127@qq.com"
         }
     ],
-    "minimum-stability": "dev",
-    "require": {
-        "guzzlehttp/guzzle": "^6.5 || ^7.0"
-    }
+    "minimum-stability": "dev"
 }
