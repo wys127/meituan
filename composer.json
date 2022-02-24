@@ -1,0 +1,19 @@
+{
+    "name": "ysheng/meituan",
+    "description": "\u0010\u0010\u0010\u0010\u0010\u0010sdk",
+    "autoload": {
+        "psr-4": {
+            "Ysheng\\Meituan\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "127sheng",
+            "email": "804630127@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "guzzlehttp/guzzle": "^6.5 || ^7.0"
+    }
+}
