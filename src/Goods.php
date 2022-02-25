@@ -33,6 +33,41 @@ class Goods extends BaseClient
         return $this->request($url, $data, 18);
     }
 
+    // 查询总部外卖菜品接口
+    public function getWmGoods($param)
+    {
+        $url = 'rms/pos/api/v1/chain/wm/goods/query';
+        $data = [
+            'orgId' => $param['orgId'], // 机构ID
+            'req' => [ // 需设置req.spuType=10
+                'spuType' => 10, // spu类型，10.菜品
+                'pageNo' => $param['pageNo'], // 页码
+                'pageSize' => $param['pageSize'], // 页码大小
+                // 'showTaxRateDepartment' => $param['showTaxRateDepartment'], // 税率信息展示：1展示，默认不展示
+                'wmSource' => $param['wmSource'], // 外卖来源：1-美团，2-饿了么
+            ],
+        ];
+
+        return $this->request($url, $data, 18);
+    }
+
+    // 查询总部外卖分类接口
+    public function getWmcate($param)
+    {
+        $url = 'rms/pos/api/v1/chain/wm/category/query';
+        $data = [
+            'orgId' => $param['orgId'], // 机构ID
+            'req' => [
+                // 'brandId' => $param['brandId'], // 品牌id
+                'wmSource' => $param['wmSource'], // 外卖来源：1-美团外卖，2-饿了么外卖
+                'pageNo' => $param['pageNo'], // 页码
+                'pageSize' => $param['pageSize'], // 页大小
+            ],
+        ];
+
+        return $this->request($url, $data, 18);
+    }
+
     // 总部-获取套餐（分页）
     public function getPackage($param)
     {

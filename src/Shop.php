@@ -59,42 +59,27 @@ class Shop extends BaseClient
         return $this->request($url, $data, 18);
     }
 
-    // 门店-获取饿了么外卖订单明细
-    public function getShopEleWmOrders($param)
+    // 结账方式查询接口
+    public function getShopSettlementMethod($param)
     {
-        $url = 'rms/pos/api/v1/poi/orders/waimai/ele/query';
+        $url = 'rms/data/api/v1/poi/settlement_method/query';
         $data = [
-            'orgId' => $param['orgId'],
-            'req' => [
-                // 'statusList' => $param['statusList'], // 外卖订单状态：1000 待接单,1100 待配送,1200 配送中,1300 已送达,1400 已完成,1500 已取消， 默认查全部
-                'pageNo' => $param['pageNo'], // 分页号, 默认为1
-                'pageSize' => $param['pageSize'], // 单页长度，不超过50，默认20
-                'queryTimeType' => $param['queryTimeType'], // 查询时间类型：1-下单时间，2-结账时间 3-外卖接单时间 4-营业日期
-                'beginTime' => $param['beginTime'], // 开始时间（毫秒）
-                'endTime' => $param['endTime'], // 结束时间（毫秒）
-                // 'sortField' => $param['sortField'], // 排序字段：1下单时间 2结账时间，默认无
-                // 'sort' => $param['sort'], // 排序方向：1逆序 2正序，默认无
-            ],
+            'orgId' => $param['orgId'], // 组织机构id
         ];
 
         return $this->request($url, $data, 18);
     }
 
-    // 门店-获取美团外卖订单明细
-    public function getShopMtWmOrders($param)
+    // 门店-获取门店下的部门信息
+    public function getShopDepart($param)
     {
-        $url = 'rms/pos/api/v1/poi/orders/waimai/mt/query';
+        $url = 'rms/pos/api/v1/poi/depart/query';
         $data = [
-            'orgId' => $param['orgId'],
+            'orgId' => $param['orgId'], // 门店的orgId
             'req' => [
-                // 'statusList' => $param['statusList'], // 外卖订单状态：1000 待接单,1100 待配送,1200 配送中,1300 已送达,1400 已完成,1500 已取消， 默认查全部
-                'pageNo' => $param['pageNo'], // 分页号, 默认为1
-                'pageSize' => $param['pageSize'], // 单页长度，不超过50，默认20
-                'queryTimeType' => $param['queryTimeType'], // 查询时间类型：1-下单时间，2-结账时间 3-外卖接单时间 4-营业日期
-                'beginTime' => $param['beginTime'], // 开始时间（毫秒）
-                'endTime' => $param['endTime'], // 结束时间（毫秒）
-                // 'sortField' => $param['sortField'], // 排序字段：1下单时间 2结账时间，默认无
-                // 'sort' => $param['sort'], // 排序方向：1逆序 2正序，默认无
+                // 'showDeleted' => $param['showDeleted'], // 是否查询已删除的信息，1-显示，2-不显示（默认）
+                'pageNo' => $param['pageNo'], // 页数，从1开始
+                'pageSize' => $param['pageSize'], // 页码大小，最大100
             ],
         ];
 
@@ -146,40 +131,6 @@ class Shop extends BaseClient
             'stlmntDatekey' => $param['stlmntDatekey'], // 结算日期 20200123
             'wmType' => $param['wmType'] // 0-总体;1-美团外卖;2-饿了么外卖
         ];
-
-        return $this->request($url, $data, 18);
-    }
-
-    // 门店-获取会员卡（会员档案）列表
-    public function getShopCards($param)
-    {
-        $url = 'rms/crm/api/v1/poi/cards/query';
-        $data = [
-            'orgId' => $param['orgId'],
-            'pageStart' => $param['pageNo'], // 分页开始编号，从0开始
-            'pageSize' => $param['pageSize'], // 分页大小，建议最大不超过2000
-        ];
-
-        isset($param['memberId']) ?? ($data['memberId'] = $param['memberId']); // 会员ID
-        isset($param['cardId']) ?? ($data['cardId'] = $param['cardId']); // 会员卡ID
-
-        return $this->request($url, $data, 18);
-    }
-
-    // 门店-获取卡操作（交易）明细列表
-    public function getShopCardsTransactions($param)
-    {
-        $url = 'rms/crm/api/v1/poi/cards/transactions/query';
-        $data = [
-            'orgId' => $param['orgId'], // 总部ID
-            'pageNo' => $param['pageNo'], // 分页页码，从1开始
-            'pageSize' => $param['pageSize'], // 分页大小，建议最大不超过2000
-            'startTime' => $param['startTime'], // 创建时间范围查询开始时间戳，毫秒
-            'endTime' => $param['endTime'], // 创建时间范围查询结束时间戳，毫秒
-        ];
-
-        isset($param['operateTypeList']) ?? ($data['operateTypeList'] = $param['operateTypeList']); // 操作类型，数组，支持多个类型
-        isset($param['cardNo']) ?? ($data['cardNo'] = $param['cardNo']); // 会员卡卡号
 
         return $this->request($url, $data, 18);
     }
@@ -333,6 +284,81 @@ class Shop extends BaseClient
         ];
 
         return $this->request('POST', $url, $data, 18);
+    }
+
+    // 门店-营业收款统计
+    public function getShopBusinessReceiptr($param)
+    {
+        $url = 'rms/data/api/v1/poi/business_receipt/query';
+        $data = [
+            'orgId' => $param['orgId'], // 机构ID
+            'startDate' => $param['startDate'], // 起始日期的时间戳
+            'endDate' => $param['endDate'], // 结束日期的时间戳，日期范围最大跨度31天
+            'pageNo' => $param['pageNo'], // 分页参数-第几页
+            'pageSize' => $param['pageSize'], // 分页参数-每页数据条数
+        ];
+
+        return $this->request($url, $data, 18);
+    }
+
+    // 门店-收入优惠统计
+    public function getShopIncomeDiscount($param)
+    {
+        $url = 'rms/data/api/v1/poi/income_discount/query';
+        $data = [
+            'orgId' => $param['orgId'], // 机构ID
+            'startDate' => $param['startDate'], // 起始日期的时间戳
+            'endDate' => $param['endDate'], // 结束日期的时间戳，日期范围最大跨度31天
+            'pageNo' => $param['pageNo'], // 分页参数-第几页
+            'pageSize' => $param['pageSize'], // 分页参数-每页数据条数
+        ];
+
+        return $this->request($url, $data, 18);
+    }
+
+    // 门店-销售品项统计
+    public function getShopSaleType($param)
+    {
+        $url = 'rms/data/api/v1/poi/sale_type/query';
+        $data = [
+            'orgId' => $param['orgId'], // 机构ID
+            'startDate' => $param['startDate'], // 起始日期的时间戳
+            'endDate' => $param['endDate'], // 结束日期的时间戳，日期范围最大跨度31天
+            'pageNo' => $param['pageNo'], // 分页参数-第几页
+            'pageSize' => $param['pageSize'], // 分页参数-每页数据条数
+        ];
+
+        return $this->request($url, $data, 18);
+    }
+
+    // 门店-菜品销售统计
+    public function getShopDishSale($param)
+    {
+        $url = 'rms/data/api/v1/poi/dish_sale/query';
+        $data = [
+            'orgId' => $param['orgId'], // 机构ID
+            'startDate' => $param['startDate'], // 起始日期的时间戳
+            'endDate' => $param['endDate'], // 结束日期的时间戳，日期范围最大跨度31天
+            'pageNo' => $param['pageNo'], // 分页参数-第几页
+            'pageSize' => $param['pageSize'], // 分页参数-每页数据条数
+        ];
+
+        return $this->request($url, $data, 18);
+    }
+
+    // 门店-支付结算统计
+    public function getShopPayStlmnt($param)
+    {
+        $url = 'rms/data/api/v1/poi/pay_stlmnt/query';
+        $data = [
+            'orgId' => $param['orgId'], // 机构ID
+            'startDate' => $param['startDate'], // 起始日期的时间戳
+            'endDate' => $param['endDate'], // 结束日期的时间戳，日期范围最大跨度31天
+            'pageNo' => $param['pageNo'], // 分页参数-第几页
+            'pageSize' => $param['pageSize'], // 分页参数-每页数据条数
+        ];
+
+        return $this->request($url, $data, 18);
     }
 
     // 门店-获取桌台信息

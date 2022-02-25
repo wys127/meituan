@@ -4,6 +4,25 @@ namespace Ysheng\Meituan;
 
 class Coupon extends BaseClient
 {
+    // 门店-发券
+    public function getShopCouponSend($param)
+    {
+        $url = 'rms/crm/api/v1/poi/coupon/send';
+        $data = [
+            'orgId' => $param['orgId'], // 机构ID
+            'memberId' => $param['memberId'], // 会员ID
+            'cardId' => $param['cardId'], // 卡ID
+            'templateId' => $param['templateId'], // 券模板ID
+            'num' => $param['num'], // 券张数
+        ];
+
+        isset($param['sendNotice']) ?? ($data['sendNotice'] = $param['sendNotice']); // 是否发送到账提醒 true
+        isset($param['expireNotice']) ?? ($data['expireNotice'] = $param['expireNotice']); // 是否发送过期提醒 false
+        isset($param['expireDays']) ?? ($data['expireDays'] = $param['expireDays']); // 过期提前提醒天数 3
+
+        return $this->request($url, $data, 18);
+    }
+
     // 门店-查询优惠券
     public function getShopCoupon($param)
     {
