@@ -12,5 +12,6 @@
             "email": "804630127@qq.com"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "license": "MIT"
 }
